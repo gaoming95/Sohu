@@ -113,10 +113,11 @@ def text2char_ner_bio_format(text):
 def build_train_data():
     with open('./data/coreEntityEmotion_train.txt', 'r', encoding='utf-8') as f:
         train = f.readlines()
-    g_data = open('./data/Bert_train', 'a', encoding='utf-8')
+    g_data = open('./data/train', 'a', encoding='utf-8')
     for line in train:
         line = json.loads(line)
         title = line['title'].strip()
+        # 按照length排序，主要是华为、华为P30，先匹配小的，再匹配大的。不会出现嵌套
         entities = sorted([entitiesEmotions['entity'].strip() for entitiesEmotions in line['coreEntityEmotions']],
                           key=lambda x: len(x), reverse=True)
         contents = line['content'].strip()
